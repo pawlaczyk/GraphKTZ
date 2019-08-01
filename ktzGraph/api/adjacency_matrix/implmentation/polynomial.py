@@ -1,4 +1,6 @@
 #coding=utf-8
+from typing import List
+
 import numpy as np
 import sympy
 
@@ -24,7 +26,7 @@ class EigenvaluesCalculator:
     def __init__(self, adjacency_matrix:np.array)->None:
         self.adjacency_matrix = adjacency_matrix
 
-    def get_eigenvalues(self):
+    def get_eigenvalues(self)->List:
         """[UWAGA!!!] Liczenie wartosci ze stałą epsilon
         Wartości własne macierzy sąsiedztwa grafu"""
         Sp = []
@@ -40,7 +42,7 @@ class EigenvaluesCalculator:
 
         return Sp
 
-    def get_unique_eigenvalues(self):
+    def get_unique_eigenvalues(self)->List:
         """Unikalne wartości własne"""
         Sp = self.get_eigenvalues()
         USp = list(set(Sp))
