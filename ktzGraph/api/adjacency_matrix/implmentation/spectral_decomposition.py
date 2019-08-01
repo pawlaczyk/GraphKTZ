@@ -1,6 +1,6 @@
 # coding=utf-8
 from itertools import combinations
-from typing import List
+from typing import List, Dict
 #TODO Logi do debugowania
 
 import numpy as np
@@ -56,7 +56,7 @@ class SpectralDecompositionCalculator:  # TODO czy juz nie ma za dużo odpowiedz
                 return 0
         return 1
 
-    def get_cospectral_matrix(self)->np.array:
+    def get_cospectral_matrix(self)->Dict:
         """Zwraca binarną macierz kospektralności grafu
         Uwaga: Każdy wierzchołek jest kospektralny sam ze sobą"""
         projections = self.get_strong_projections()  # słownik: macierz, wierzchołek, SP
@@ -70,7 +70,7 @@ class SpectralDecompositionCalculator:  # TODO czy juz nie ma za dużo odpowiedz
 
         return spectral_matrix
 
-    def strong_cospectral_matrix(self)->np.array:
+    def strong_cospectral_matrix(self)->Dict:
         strong_projections = self.get_strong_projections()
         strong_spectral_matrix = np.identity(self.adjacency_matrix.shape[0])
 
