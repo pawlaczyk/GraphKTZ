@@ -1,0 +1,25 @@
+# coding=utf-8
+#coding=utf-8
+import unittest
+
+
+class SpectralDecompositionCalculatorTest(unittest.TestCase):
+
+    def test_get_projections_should_pass(self):
+        pass
+
+    def test_get_strong_projections_should_pass(self):
+        pass
+
+    def test_compare_spectral_list_should_pass(self):
+        pass
+
+    def test_compare_spectral_list_should_pass(self):
+        pass
+
+    def test_get_cospectral_matrix_should_pass(self):
+        pass
+
+    def test_get_strong_cospectral_matrix_should_pass(self):
+        pass
+
