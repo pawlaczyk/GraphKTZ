@@ -13,7 +13,7 @@ class SpectralDecompositionCalculator:  # TODO czy juz nie ma za dużo odpowiedz
     def __init__(self, adjacency_matrix: np.array):
         self.adjacency_matrix = adjacency_matrix
 
-    def get_projections(self):
+    def get_projections(self)->Dict: #TODO typ zwracany
         """Utworzenie wszystkich projekcji poprzez kolejne usuwanie wierzchołka -
         w każdym kroku brana jest macierz oryginalna i usuwany jest kolejny jeden wierzchołek
         Liczba projekcji wynosi n; gdzie n to liczba wierzchołków"""
@@ -27,14 +27,14 @@ class SpectralDecompositionCalculator:  # TODO czy juz nie ma za dużo odpowiedz
 
         return projections
 
-    def get_strong_projections(self)->np.array:
+    def get_strong_projections(self)->Dict: #TODO typ zwracany
         """Utworzenie wszystkich projekcji poprzez kolejne usuwanie wierzchołka -
         w każdym kroku brana jest macierz oryginalna i usuwany jest kolejny jeden wierzchołek
         Liczba projekcji wynosi n; gdzie n to liczba wierzchołków"""
         indexes = list(combinations([n for n in range(self.adjacency_matrix.shape[0])], 2))
 
         strong_projections = []
-        for i,j in indexes:
+        for i, j in indexes:
             arr = np.delete(self.adjacency_matrix, i, axis=0)
             arr = np.delete(arr, i, axis=0)
 
