@@ -14,52 +14,52 @@ class IsGraphCheckerTest(unittest.TestCase):
         self.k2 = np.array([[0, 1], [1, 0]])
 
     def test_is_graph_proper_matrix_should_pass(self):
+        is_graph_checker = IsGraphChecker(self.k1)
+        self.assertTrue(is_graph_checker.check())
+
         matrix = np.array([[0,1], [1,0]])
         is_graph_checker = IsGraphChecker(matrix)
-        self.assertTrue(is_graph_checker.is_graph())
-
-        is_graph_checker = IsGraphChecker(self.k1)
-        self.assertTrue(is_graph_checker.is_graph())
+        self.assertTrue(is_graph_checker.check())
 
     def test_is_graph_non_quadratic_matrix_should_not_pass(self):
         matrix = np.array([[0, 1, 0], [1, 0, 1]])
         is_graph_checker = IsGraphChecker(matrix)
-        self.assertRaises(GraphCheckerError, is_graph_checker.is_graph)
+        self.assertRaises(GraphCheckerError, is_graph_checker.check)
 
         is_graph_checker = IsGraphChecker(self.graph_zero)
-        self.assertRaises(GraphCheckerError, is_graph_checker.is_graph)
+        self.assertRaises(GraphCheckerError, is_graph_checker.check)
 
     def test_is_graph_matrix_with_negative_number_should_not_pass(self):
         matrix = np.array([-1])
         is_graph_checker = IsGraphChecker(matrix)
-        self.assertRaises(GraphCheckerError, is_graph_checker.is_graph)
+        self.assertRaises(GraphCheckerError, is_graph_checker.check)
 
         matrix = np.array([[-1, 0], [1, 0]])
         is_graph_checker = IsGraphChecker(matrix)
-        self.assertRaises(GraphCheckerError, is_graph_checker.is_graph)
+        self.assertRaises(GraphCheckerError, is_graph_checker.check)
 
     def test_is_graph_matrix_with_non_integer_number_should_not_pass(self):
         matrix = np.array([1.1])
         is_graph_checker = IsGraphChecker(matrix)
-        self.assertRaises(GraphCheckerError, is_graph_checker.is_graph)
+        self.assertRaises(GraphCheckerError, is_graph_checker.check)
 
         matrix = np.array([0.0])
         is_graph_checker = IsGraphChecker(matrix)
-        self.assertRaises(GraphCheckerError, is_graph_checker.is_graph)
+        self.assertRaises(GraphCheckerError, is_graph_checker.check)
 
         matrix = np.array([0.000000000000000000000000000001])
         is_graph_checker = IsGraphChecker(matrix)
-        self.assertRaises(GraphCheckerError, is_graph_checker.is_graph)
+        self.assertRaises(GraphCheckerError, is_graph_checker.check)
 
     def test_is_graph_with_unsupported_data_should_not_pass(self):
         matrix = np.array(["A"])
         is_graph_checker = IsGraphChecker(matrix)
-        self.assertRaises(GraphCheckerError, is_graph_checker.is_graph)
+        self.assertRaises(GraphCheckerError, is_graph_checker.check)
 
         matrix = np.array(["\n"])
         is_graph_checker = IsGraphChecker(matrix)
-        self.assertRaises(GraphCheckerError, is_graph_checker.is_graph)
+        self.assertRaises(GraphCheckerError, is_graph_checker.check)
 
         matrix = np.array([None])
         is_graph_checker = IsGraphChecker(matrix)
-        self.assertRaises(GraphCheckerError, is_graph_checker.is_graph)
+        self.assertRaises(GraphCheckerError, is_graph_checker.check)

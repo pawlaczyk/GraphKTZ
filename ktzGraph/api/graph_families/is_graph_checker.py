@@ -6,11 +6,16 @@ class GraphCheckerError(Exception):
     """Exception for checking graph classes"""
 
 
-class IsGraphChecker:
-    def __init__(self, matrix:np.array)->bool:
+class GraphCheckerBase:
+    def __init__(self, matrix:np.array):
         self.matrix = matrix
 
-    def is_graph(self)->bool:
+    def check(self):
+        pass
+
+
+class IsGraphChecker(GraphCheckerBase):
+    def check(self)->bool:
         """
         Macierz grafu:
         - wartości całkowite
@@ -18,7 +23,7 @@ class IsGraphChecker:
         - wartości większe od zera
         """
         try:
-            non_integer_values = filter(lambda ele: issubclass(ele.dtype.type, np.integer), self.matrix.ravel())
+            non_integer_values = filter(lambda ele: issubclass(ele.dtype.type, np.int64) or isinstance(ele, int), self.matrix.ravel())
             if list(non_integer_values):
                 raise GraphCheckerError("Matrix contains non integers values.")
 
@@ -32,7 +37,7 @@ class IsGraphChecker:
             if n != m:
                 raise GraphCheckerError("Matrix is not quadratic.")
 
-            negative_elements = filter(lambda x: x is False, np.greater_equal(self.matrix, 0).ravel())
+            negative_elements = filter(lambda x: not x, np.greater_equal(self.matrix, 0).ravel())
             if list(negative_elements):
                 raise GraphCheckerError("Matrix contains negative values.")
 
