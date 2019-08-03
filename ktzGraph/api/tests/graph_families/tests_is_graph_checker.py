@@ -3,7 +3,8 @@ import unittest
 import mock
 import numpy as np
 
-from ktzGraph.api.graph_families.is_graph_checker import IsGraphChecker, GraphCheckerError, IsSimpleGraphChecker
+from ktzGraph.api.graph_families.is_graph_checker import IsGraphChecker, GraphCheckerError, IsSimpleGraphChecker, \
+    IsNonDirectedGraphChecker
 
 
 class IsGraphCheckerTest(unittest.TestCase):
@@ -104,3 +105,37 @@ class IsSimpleGraphCheckerTest(unittest.TestCase):
         matrix = np.array([[1, 1], [1, 2]])
         simple_graph_checker = IsSimpleGraphChecker(matrix)
         self.assertFalse(simple_graph_checker.check())
+
+
+class IsNonDirectedGraphCheckerTest(unittest.TestCase):
+    def setUp(self):
+        self.graph_zero = np.array([0])
+        self.k1 = np.array([1])
+        self.k2 = np.array([[0, 1], [1, 0]])
+        self.zero_matrix = np.zeros((2, 2))
+
+    @mock.patch("ktzGraph.api.graph_families.is_graph_checker.IsSimpleGraphChecker.check")
+    def test_check_with_symmetric_matrix_should_pass(self, mocked_super):
+        is_non_directed_graph_checker = IsNonDirectedGraphChecker(self.k1)
+        self.assertTrue(is_non_directed_graph_checker.check())
+
+        simple_graph_checker = IsNonDirectedGraphChecker(self.k2)
+        self.assertTrue(simple_graph_checker.check())
+
+        matrix = np.array([[1, 1], [1, 1]])
+        simple_graph_checker = IsNonDirectedGraphChecker(matrix)
+        self.assertTrue(simple_graph_checker.check())
+
+        matrix = np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+        simple_graph_checker = IsNonDirectedGraphChecker(matrix)
+        self.assertTrue(simple_graph_checker.check())
+
+    @mock.patch("ktzGraph.api.graph_families.is_graph_checker.IsSimpleGraphChecker.check")
+    def test_check_with_non_symmetric_matrix_should_not_pass(self, mocked_super):
+        matrix = np.array([[1, 0], [1, 0]])
+        is_non_directed_graph_checker = IsNonDirectedGraphChecker(matrix)
+        self.assertFalse(is_non_directed_graph_checker.check())
+
+        matrix = np.array([[1, 0], [1, 0]])
+        is_non_directed_graph_checker = IsNonDirectedGraphChecker(matrix)
+        self.assertFalse(is_non_directed_graph_checker.check())

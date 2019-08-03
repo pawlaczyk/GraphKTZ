@@ -3,7 +3,7 @@ import numpy as np
 
 
 class GraphCheckerError(Exception):
-    """Exception for checking graph classes"""
+    """Exception for checking graph families"""
 
 
 class GraphCheckerBase:
@@ -82,7 +82,10 @@ class IsSimpleGraphChecker(IsGraphChecker):
 
 class IsNonDirectedGraphChecker(IsSimpleGraphChecker):
     def check(self)->bool:
-        pass
+        """
+        Dla grafów nieskierowanych macierz sąsiedztwa jest z definicji symetryczna
+        """
+        return np.allclose(self.matrix, self.matrix.T)  # checks is symmetric
 
 
 class IsDirectedGraphChecker(IsSimpleGraphChecker):
