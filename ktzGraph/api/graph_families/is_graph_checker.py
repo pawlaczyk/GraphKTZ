@@ -21,23 +21,33 @@ class IsGraphChecker(GraphCheckerBase):
         - wartości całkowite
         - kwadratowa
         - wartości większe od zera
+        @note: Wyjątek grafy o n=1
         """
+        def check_is_numpy_integer(ele):
+            if issubclass(ele.dtype.type, np.int64):
+                return True
+            if issubclass(ele.dtype.type, np.int32):
+                return True
+            return False
+
         try:
-            non_integer_values = filter(lambda ele: issubclass(ele.dtype.type, np.int64) or isinstance(ele, int), self.matrix.ravel())
+            non_integer_values = filter(lambda ele: not check_is_numpy_integer(ele), self.matrix.ravel())
             if list(non_integer_values):
                 raise GraphCheckerError("Matrix contains non integers values.")
 
-            if self.matrix.shape == (1,):
-                if self.matrix[0] == 1:
-                    return True  # K1 graph
-                else:
-                    raise GraphCheckerError("Graph Zero is not supported.")
+            if not np.count_nonzero(self.matrix):
+                raise GraphCheckerError("Graph Zero is not supported.")
 
-            n, m = self.matrix.shape
+            if self.matrix.shape == (1,):
+                if np.greater_equal(self.matrix, 1):
+                    return True  # K1 or cycle
+                raise GraphCheckerError("Zero graph is not supported.")
+
+            n, m = self.matrix.shape or (self.matrix.shape, None)
             if n != m:
                 raise GraphCheckerError("Matrix is not quadratic.")
 
-            negative_elements = filter(lambda x: not x, np.greater_equal(self.matrix, 0).ravel())
+            negative_elements = filter(lambda x: x, np.less(self.matrix, 0).ravel())
             if list(negative_elements):
                 raise GraphCheckerError("Matrix contains negative values.")
 
@@ -48,25 +58,43 @@ class IsGraphChecker(GraphCheckerBase):
 
 
 class IsSimpleGraphChecker(IsGraphChecker):
-    def is_simple(self)->bool:
-        pass
+    def check(self)->bool:
+        """
+        Macierz grafu prostego:
+        - binarna
+        - zera na głównej przekątnej
+
+        @note: wyjątek graf K1
+        """
+        super(IsSimpleGraphChecker, self).check()
+
+        if not np.array_equal(self.matrix, self.matrix.astype(bool)):
+            return False
+
+        if self.matrix.shape == (1,):
+            return True  # K1 or cycle albo od razu budować graf K1?
+
+        if list(filter(lambda x: np.not_equal(x, 0), self.matrix.diagonal())):
+            return False
+
+        return True
 
 
 class IsNonDirectedGraphChecker(IsSimpleGraphChecker):
-    def is_non_directed(self):
+    def check(self)->bool:
         pass
 
 
 class IsDirectedGraphChecker(IsSimpleGraphChecker):
-    def is_directed(self):
+    def check(self)->bool:
         pass
 
 
 class IsCyclicGraphChecker(IsSimpleGraphChecker):
-    def is_cyclic(self):
+    def check(self)->bool:
         pass
 
 
 class IsCirculantGraphChecker(IsSimpleGraphChecker):
-    def is_circulant(self):
+    def check(self)->bool:
         pass
