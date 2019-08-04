@@ -1,9 +1,15 @@
 # coding=utf-8
+"""
+TODO: jak przedstawić graf o pyustym zbiorze wierzchołków? inna reprezentacja grafu niż macierz sąsiedztwa?
+"""
 import numpy as np
 
 
 class GraphCheckerError(Exception):
     """Exception for checking graph families"""
+
+class GraphNotImpementedError(NotImplementedError):
+    """Exception for not supported familes of graph"""
 
 
 class GraphCheckerBase:
@@ -63,6 +69,8 @@ class IsSimpleGraphChecker(IsGraphChecker):
         Macierz grafu prostego:
         - binarna
         - zera na głównej przekątnej
+        - zbiór wierzchołków niepusty V(G)
+        - E(G) zbiór krawędzie może być pusty
 
         @note: wyjątek graf K1
         """
